@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>ScreenshotWindow.qml</file>
+        <file>Sources/clipboard.svg</file>
+        <file>Sources/scissors.svg</file>
+        <file>Sources/save.svg</file>
+        <file>Sources/reset.svg</file>
+        <file>Sequences.qml</file>
+    </qresource>
+</RCC>
