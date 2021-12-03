@@ -1,23 +1,12 @@
-import QtQuick 2.15
+import QtQuick
 
-Window
-{
+Window {
     id: transparentWindow
-    visible: true
-    visibility: "FullScreen"
 
     onClosing: {
-        screenshotWindowLoader.active = false;
         mainWindow.show();
-    }
 
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton;
-        onReleased: {
-            snippedImage.enabled = true;
-            transparentWindow.close();
-        }
+        destroy();
     }
 
     Image {
@@ -29,16 +18,23 @@ Window
     Connections {
         target: ImageProvider
 
-        function onSignalNewFrameReady() {
+        function onNewFrameReady() {
             screenshotImage.source = "";
             screenshotImage.source = "image://ImageProvider/";
         }
 
-        function onForceFinish() { clearAndFinish(); }
+        function onForceFinish() {
+            clearAndFinish();
+        }
+
+        function onFinished() {
+            snippedImage.enabled = true;
+            transparentWindow.close();
+        }
     }
 
     Item {
-        focus: true
+        focus: true;
         Keys.onPressed: clearAndFinish();
     }
 

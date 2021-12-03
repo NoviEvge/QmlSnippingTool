@@ -1,5 +1,5 @@
 #include "FileOperationsManager.h"
-#include "support/ImagesContainer.h"
+#include "ImagesContainer.h"
 
 #include <QGuiApplication>
 #include <QClipboard>

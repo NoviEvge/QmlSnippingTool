@@ -1,5 +1,5 @@
 #include "BaseSnippingArea.h"
-#include "support/MouseEventHandler.h"
+#include "MouseEventHandler.h"
 
 void BaseSnippingArea::mouseEvent(QPoint point, QEvent::Type eventType)
 {

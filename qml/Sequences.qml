@@ -1,7 +1,6 @@
-import QtQuick 2.15
+import QtQuick
 
-Item
-{
+Item {
     Shortcut {
         sequences: [StandardKey.New];
         onActivated: createBtn.clicked();
@@ -20,5 +19,9 @@ Item
     Shortcut {
         sequences: [StandardKey.Delete];
         onActivated: snippedImage.clearImage();
+    }
+
+    SaveFileDialog{
+        id: fileDialog;
     }
 }

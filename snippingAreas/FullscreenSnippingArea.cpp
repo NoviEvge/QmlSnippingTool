@@ -1,5 +1,5 @@
 #include "FullscreenSnippingArea.h"
-#include "support/ImagesContainer.h"
+#include "ImagesContainer.h"
 
 void FullscreenSnippingArea::mousePress(QPoint)
 {

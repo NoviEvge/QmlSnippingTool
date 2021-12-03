@@ -2,7 +2,7 @@
 
 #include <QPainter>
 #include <QPainterPath>
-#include "support/ImagesContainer.h"
+#include "ImagesContainer.h"
 
 void FreeFormSnippingArea::mousePress(QPoint point)
 {
@@ -37,6 +37,8 @@ void FreeFormSnippingArea::mouseRelease(QPoint)
 
     imageContainer->setOriginalImage( newImage.copy(polygonRect) );
     polygons_m.clear();
+
+    emit finished();
 }
 
 void FreeFormSnippingArea::mouseMove(QPoint point)

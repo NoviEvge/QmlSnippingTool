@@ -1,10 +1,9 @@
 #include "ImageProvider.h"
+#include "ImagesContainer.h"
 
 #include <QGuiApplication>
 #include <QScreen>
 #include <QPainter>
-
-#include <support/ImagesContainer.h>
 
 ImageProvider::ImageProvider() : QQuickImageProvider(QQuickImageProvider::Image)
 {
@@ -31,10 +30,7 @@ QImage ImageProvider::requestImage(const QString &id, QSize *size, const QSize &
     }
 
     if ( !image_m.isNull() )
-    {
-        size->setWidth( image_m.width() );
-        size->setHeight( image_m.height() );
-    }
+        *size = image_m.size();
 
     return image_m;
 }
@@ -72,5 +68,5 @@ void ImageProvider::screenshotUpdated(QImage image )
 {
     image_m = image;
 
-    emit signalNewFrameReady();
+    emit newFrameReady();
 }

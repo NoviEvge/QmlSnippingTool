@@ -1,5 +1,5 @@
 #include "RectangleSnippingArea.h"
-#include "support/ImagesContainer.h"
+#include "ImagesContainer.h"
 
 #include <QPainter>
 
@@ -22,6 +22,8 @@ void RectangleSnippingArea::mouseRelease(QPoint point)
     const auto scaledSelectionArea = highDPIScaler_m.scale( selectionArea );
 
     imageContainer->setOriginalImage( origImage.copy( scaledSelectionArea ) );
+
+    emit finished();
 }
 
 void RectangleSnippingArea::mouseMove(QPoint point)

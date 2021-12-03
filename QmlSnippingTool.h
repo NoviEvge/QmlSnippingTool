@@ -1,18 +1,18 @@
-#ifndef SNIPPINGTOOL_H
-#define SNIPPINGTOOL_H
+#ifndef QMLSNIPPINGTOOL_H
+#define QMLSNIPPINGTOOL_H
 
 #include <QObject>
 
-#include "captureMode/CaptureMode.h"
+#include "support/CaptureMode.h"
+#include "support/ImageProvider.h"
 #include "snippingAreas/BaseSnippingArea.h"
-#include "ImageProvider.h"
 
-class SnippingTool : public QObject
+class QmlSnippingTool : public QObject
 {
     Q_OBJECT
 
 public:
-    SnippingTool();
+    QmlSnippingTool();
 
     ImageProvider* imageProvider() const;
     CaptureMode* captureMode() const;
@@ -26,4 +26,4 @@ private:
     CaptureMode* captureMode_m;
 };
 
-#endif // SNIPPINGTOOL_H
+#endif // QMLSNIPPINGTOOL_H

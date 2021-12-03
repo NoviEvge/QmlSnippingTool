@@ -1,7 +1,7 @@
 #ifndef BaseSnippingArea_H
 #define BaseSnippingArea_H
 
-#include "support/HighDpiScaler.h"
+#include "HighDpiScaler.h"
 
 #include <QEvent>
 #include <QImage>
@@ -15,8 +15,8 @@ protected:
     BaseSnippingArea() = default;
 
     virtual void mousePress( QPoint) {};
-    virtual void mouseRelease( QPoint ){};
-    virtual void mouseMove( QPoint ){};
+    virtual void mouseRelease( QPoint ) {};
+    virtual void mouseMove( QPoint ) {};
 
 public slots:
     void mouseEvent(QPoint point, QEvent::Type eventType);
@@ -26,6 +26,7 @@ public slots:
 signals:
     void screenshotUpdated( QImage image );
     void forceFinish();
+    void finished();
 
 protected:
     HighDPIScaler highDPIScaler_m;

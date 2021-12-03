@@ -15,10 +15,11 @@ public:
     Q_INVOKABLE void clear();
 
 signals:
-    void signalNewFrameReady();
+    void newFrameReady();
     void screenshotCreated();
     void screenshotFinished();
     void forceFinish();
+    void finished();
 
 private:
     QImage takeScreenshot();
