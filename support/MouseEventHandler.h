@@ -13,11 +13,11 @@ class MouseEventHandler : public QObject
 Q_OBJECT
 
 public:
-   static QObject *singletoneInstance(QQmlEngine*, QJSEngine*);
+   static QObject *singletoneInstance( QQmlEngine*, QJSEngine* );
    static MouseEventHandler* instance();
 
 protected:
-   bool eventFilter(QObject* sender, QEvent* event);
+   bool eventFilter( QObject* sender, QEvent* event );
 
 signals:
    void mouseEvent( QPoint cursorPosition, QEvent::Type eventType );

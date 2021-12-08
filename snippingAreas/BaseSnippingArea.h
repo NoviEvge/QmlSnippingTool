@@ -19,7 +19,7 @@ protected:
     virtual void mouseMove( QPoint ) {};
 
 public slots:
-    void mouseEvent(QPoint point, QEvent::Type eventType);
+    void mouseEvent( QPoint point, QEvent::Type eventType );
     void screenshotCreated();
     void screenshotFinished();
 

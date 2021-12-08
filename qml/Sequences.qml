@@ -2,12 +2,12 @@ import QtQuick
 
 Item {
     Shortcut {
-        sequences: [StandardKey.New];
+        sequences: [ StandardKey.New ];
         onActivated: createBtn.clicked();
     }
 
     Shortcut {
-        sequences: [StandardKey.Save];
+        sequences: [ StandardKey.Save ];
         onActivated: fileDialog.open();
     }
 
@@ -17,11 +17,16 @@ Item {
     }
 
     Shortcut {
-        sequences: [StandardKey.Delete];
+        sequences: [ StandardKey.Delete ];
         onActivated: snippedImage.clearImage();
     }
 
-    SaveFileDialog{
+    Shortcut {
+        sequences: [ StandardKey.Print ];
+        onActivated: support.createWindow( "qrc:/qml/SettingsWindow.qml" ).show();
+    }
+
+    SaveFileDialog {
         id: fileDialog;
     }
 }

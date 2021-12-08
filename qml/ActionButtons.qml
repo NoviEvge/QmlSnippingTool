@@ -4,13 +4,13 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 
 RowLayout {
-    spacing: mainWindow.marginSize;
+    spacing: Constants.marginSize;
 
     Button {
         visible: snippedImage.enabled;
         Material.background: "white";
         onClicked: fileDialog.open();
-        icon.source: "qrc:/resources/save.svg";
+        icon.source: "qrc:/qml/images/save.svg";
         ToolTip.visible: hovered;
         ToolTip.text: "Save screenshot( Ctrl+S )";
     }
@@ -19,7 +19,7 @@ RowLayout {
         visible: snippedImage.enabled;
         Material.background: "white";
         onClicked: FileOperations.copyToClipboard();
-        icon.source: "qrc:/resources/clipboard.svg";
+        icon.source: "qrc:/qml/images/clipboard.svg";
         ToolTip.visible: hovered;
         ToolTip.text: "Copy to clipboard( Ctrl+C )";
     }
@@ -28,17 +28,17 @@ RowLayout {
         visible: snippedImage.enabled;
         Material.background: "white";
         onClicked: snippedImage.clearImage();
-        icon.source: "qrc:/resources/reset.svg";
+        icon.source: "qrc:/qml/images/reset.svg";
         ToolTip.visible: hovered;
         ToolTip.text: "Remove screenshot( Del, Ctrl+D )";
     }
 
     Button {
         Material.background: "white";
-        onClicked: support.createWindow("qrc:/qml/SettingsWindow.qml").show();
-        icon.source: "qrc:/resources/settings.svg";
+        onClicked: support.createWindow( "qrc:/qml/SettingsWindow.qml" ).show();
+        icon.source: "qrc:/qml/images/settings.svg";
         ToolTip.visible: hovered;
-        ToolTip.text: "Settings";
+        ToolTip.text: "Settings ( Ctrl+P )";
     }
 
     SaveFileDialog {

@@ -14,8 +14,9 @@ Item {
         property int delay: 0;
         property bool autoCopyToClipboard: true;
         property bool autoSaveToFolder: false;
-        property url saveFolderPath: StandardPaths.writableLocation( StandardPaths.DocumentsLocation );
-        property string fileType: ".png";
+        property url saveFolderPath: getDefaultSaveFolderPath();
+        property int fileTypeIndex: 0;
+        property string fileType: "*.png";
     }
 
     function setDelay( value ) {
@@ -50,6 +51,18 @@ Item {
         return settings.saveFolderPath;
     }
 
+    function getDefaultSaveFolderPath() {
+        return StandardPaths.writableLocation( StandardPaths.DocumentsLocation )
+    }
+
+    function setFileTypeIndex( value ) {
+        settings.fileTypeIndex = value;
+    }
+
+    function getFileTypeIndex() {
+        return settings.fileTypeIndex;
+    }
+
     function setFileType( value ) {
         settings.fileType = value;
     }
@@ -59,14 +72,19 @@ Item {
     }
 
     function processActions() {
-        if( getAutoSaveToFolder() )
+        if( getAutoCopyToClipboard() )
             FileOperations.copyToClipboard();
 
         if( getAutoSaveToFolder() )
         {
-            var folderPath = getSaveFolderPath().toString().replace(/^(file:\/{2})/,"") + "/";
-            var fileName = "Caption_" + Qt.formatDateTime( new Date(), "ddMMyy_hhmmss");
+            var folderPath = support.getCorrectFolderPath( getSaveFolderPath().toString() ) + "/";
+            var fileName = "Caption_" + Qt.formatDateTime( new Date(), "ddMMyy_hhmmss" );
+
             FileOperations.saveFile( folderPath + fileName + getFileType() );
         }
+    }
+
+    Support {
+        id: support;
     }
 }

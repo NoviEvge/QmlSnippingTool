@@ -6,9 +6,9 @@
 class RectangleSnippingArea : public BaseSnippingArea
 {
 protected:
-    virtual void mousePress( QPoint point ) override;
+    virtual void mousePress( QPoint point )   override;
     virtual void mouseRelease( QPoint point ) override;
-    virtual void mouseMove( QPoint point ) override;
+    virtual void mouseMove( QPoint point )    override;
 
 private:
     QRect getSelectionArea( QPoint point ) const;

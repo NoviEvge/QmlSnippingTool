@@ -5,14 +5,14 @@ Window {
 
     onClosing: {
         mainWindow.show();
-
         destroy();
     }
 
     Image {
-        id: screenshotImage
-        anchors.fill: parent
+        id: screenshotImage;
+        anchors.fill: parent;
         source: "image://ImageProvider/screenshot";
+        scale: support.isWindowsOS() ? support.scaleFactor() : scale;
     }
 
     Connections {
@@ -41,5 +41,9 @@ Window {
     function clearAndFinish() {
         snippedImage.clearImage();
         transparentWindow.close();
+    }
+
+    Support {
+        id: support;
     }
 }

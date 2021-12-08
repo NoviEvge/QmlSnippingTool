@@ -16,15 +16,15 @@ QmlSnippingTool::QmlSnippingTool()
                       &QmlSnippingTool::captureModeChanged );
 }
 
-void QmlSnippingTool:: captureModeChanged(CaptureModes mode)
+void QmlSnippingTool:: captureModeChanged( CaptureModes mode )
 {
     switch( mode )
     {
         case CaptureModes::eRectangle:
-            snippingArea_m.reset( new RectangleSnippingArea);
+            snippingArea_m.reset( new RectangleSnippingArea );
             break;
         case CaptureModes::eFreeForm:
-            snippingArea_m.reset( new FreeFormSnippingArea);
+            snippingArea_m.reset( new FreeFormSnippingArea );
             break;
         case CaptureModes::eFullScreen:
             snippingArea_m.reset( new FullscreenSnippingArea );

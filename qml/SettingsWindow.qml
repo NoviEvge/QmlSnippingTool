@@ -4,29 +4,24 @@ import QtQuick.Controls
 import Qt.labs.platform
 import QtQuick.Controls.Material
 
-import Properties
-
 Window {
 
-    width:  layout.implicitWidth + spacingAroundLayout;
-    height: layout.implicitHeight + spacingAroundLayout;
+    width:  layout.implicitWidth  + Constants.bigMarginSize;
+    height: layout.implicitHeight + Constants.bigMarginSize;
     minimumWidth : width;
     minimumHeight: height;
     maximumWidth:  width;
     maximumHeight: height;
-
-    property int spacingAroundLayout: 50;
-
-    //Component.onCompleted: mainWindow. = false;
+    modality: Qt.WindowModal
 
     onClosing: {
         Properties.setDelay( defaultDelay.currentIndex );
         Properties.setAutoCopyToClipboard( copyToClipboard.checked );
         Properties.setAutoSaveToFolder( autoSaveToFolder.checked );
-        Properties.setSaveFolderPath( folderDialog.folder );
+        Properties.setSaveFolderPath( folderDialog.getFolderUrl() );
+        Properties.setFileTypeIndex( fileType.currentIndex );
         Properties.setFileType( fileType.currentValue );
         Properties.propertiesUpdated();
-       // mainWindow.active = true;
 
         destroy();
     }
@@ -68,7 +63,7 @@ Window {
                     id: defaultFolderPath;
                     text: folderDialog.getFolderPath();
                     ToolTip.visible: hovered;
-                    ToolTip.text: folderDialog.getFolderPath();
+                    ToolTip.text: folderDialog.getFolderPath() ? folderDialog.getFolderPath() : "Empty ( Documents folder by default )";
                     onTextEdited: folderDialog.setFolderPath( text );
                 }
             }
@@ -83,6 +78,7 @@ Window {
             id: fileType;
             enabled: autoSaveToFolder.checkState;
             Layout.fillWidth: true;
+            currentIndex: Properties.getFileTypeIndex();
             displayText: "File type: " + currentValue;
             model: [ ".png", ".jpg", ".jpeg", ".bmp" ];
         }
@@ -93,12 +89,20 @@ Window {
         acceptLabel: "Select";
         folder: Properties.getSaveFolderPath();
 
+        function getFolderUrl() {
+              return getFolderPath() ? folder : Properties.getDefaultSaveFolderPath();
+        }
+
         function getFolderPath() {
-            return folderDialog.folder.toString().replace(/^(file:\/{2})/,"")
+            return support.getCorrectFolderPath( folderDialog.folder.toString() );
         }
 
         function setFolderPath( path ) {
-            folderDialog.folder = "file://" + path;
+            folderDialog.folder = "file://" + ( Support.isWindowsOS() ? "/" : "" ) + path;
         }
+    }
+
+    Support {
+        id: support;
     }
 }

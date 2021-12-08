@@ -6,7 +6,9 @@ target_sources( snippingAreas PRIVATE
                     FreeFormSnippingArea.h
                     FreeFormSnippingArea.cpp
                     FullscreenSnippingArea.h
-                    FullscreenSnippingArea.cpp)
+                    FullscreenSnippingArea.cpp
+                    RectangleSnippingArea.h
+                    RectangleSnippingArea.cpp)
 
 target_include_directories(snippingAreas PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 

@@ -5,23 +5,25 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 
 import MouseEventHandler
-import Properties
 
 ApplicationWindow {
-    id: mainWindow
-    visible: true
-    minimumWidth: rowLayout.width;
-    minimumHeight: rowLayout.height + captureBox.height * ( captureBox.count - 0.5 );
-    maximumWidth: Math.min( Screen.desktopAvailableWidth,  snippedImage.implicitWidth + marginSize * 2 ); // 2 - both margin sides
-    maximumHeight: Math.min( Screen.desktopAvailableHeight, rowLayout.height + snippedImage.implicitHeight + marginSize * 2 ); // 2 - both margin sides
-    width: maximumWidth;
-    height: maximumHeight;
+    id: mainWindow;
+    visible: true;
+    maximumWidth:  Screen.desktopAvailableWidth;
+    maximumHeight: Screen.desktopAvailableHeight;
+    minimumWidth:  rowLayout.implicitWidth;
+    minimumHeight: rowLayout.implicitHeight + captureBox.height * ( captureBox.count - 0.5 );
+    width:  Math.max( minimumWidth, snippedImage.scaledWidth + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
+    height: Math.max( minimumHeight, rowLayout.implicitHeight + snippedImage.scaledHeight + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
 
-    property int marginSize: vbar.width; // == hbar.height
+    onWidthChanged:  x = ( ( x + width  ) < maximumWidth  ) ? maximumWidth  * 0.2 : 0;  // 0.2 = 20%,
+    onHeightChanged: y = ( ( y + height ) < maximumHeight ) ? maximumHeight * 0.2 : 30; // 0.2 = 20%, position with "main header"
 
     MouseArea {
         anchors.fill: parent;
-        Connections { target: MouseEventHandler }
+        Connections {
+            target: MouseEventHandler;
+        }
     }
 
     header: Rectangle {
@@ -30,36 +32,36 @@ ApplicationWindow {
 
         RowLayout {
             id: rowLayout;
-            spacing: marginSize;
+            spacing: Constants.marginSize;
 
             Button {
                 id: createBtn;
                 text: "Create";
                 Material.background: "white";
                 Layout.leftMargin: spacing * 2;
-                icon.source: "qrc:/resources/scissors.svg";
+                icon.source: "qrc:/qml/images/scissors.svg";
 
                 property var startFunction: function() {
                     var fullScreenModeIndex = 2;
-                    if(captureBox.currentIndex === fullScreenModeIndex) {
+                    if( captureBox.currentIndex === 2 ) {
                         snippedImage.enabled = true;
                         mainWindow.show();
                     }
                     else {
-                        support.createWindow("qrc:/qml/ScreenshotWindow.qml").showFullScreen();
+                        support.createWindow( "qrc:/qml/ScreenshotWindow.qml" ).showFullScreen();
                     }
                 }
 
                 onClicked: {
                     snippedImage.clearImage();
                     mainWindow.hide();
-                    support.delay( 150 + delayBox.sleepValue, startFunction);
+                    support.delay( 250 + delayBox.sleepValue, startFunction );
                 }
             }
 
             ComboBox {
                 id: captureBox;
-                onCurrentIndexChanged: CaptureMode.changeMode(currentIndex);
+                onCurrentIndexChanged: CaptureMode.changeMode( currentIndex );
                 model: ListModel {
                     ListElement { text: "Rectangle"  }
                     ListElement { text: "Free Form"  }
@@ -81,68 +83,72 @@ ApplicationWindow {
             }
 
             ToolSeparator {
-                Layout.rightMargin: -marginSize / 2;
-                Layout.leftMargin: -marginSize / 2;
+                Layout.rightMargin: -Constants.marginSize / 2;
+                Layout.leftMargin:  -Constants.marginSize / 2;
             }
 
             ActionButtons {
-                Layout.rightMargin: marginSize;
+                Layout.rightMargin: Constants.marginSize;
             }
         }
     }
 
-    Rectangle {
-        id: frame;
+    Flickable {
+        id: flickable;
         clip: true;
         anchors.fill: parent;
-        anchors.margins: marginSize;
+        anchors.margins: Constants.bigMarginSize;
+        boundsBehavior: Flickable.StopAtBounds;
+
+        width:  Math.min( snippedImage.scaledWidth,  mainWindow.width );
+        height: Math.min( snippedImage.scaledHeight, mainWindow.height );
+        contentWidth:  snippedImage.scaledWidth;
+        contentHeight: snippedImage.scaledHeight;
 
         Image {
             id : snippedImage;
             enabled: false;
             cache: false;
-            x: -hbar.position * width;
-            y: -vbar.position * height ;
+            transform: support.getTransformScale();
             source: enabled ? "image://ImageProvider/snipped" : "";
-            onEnabledChanged: {
-                hbar.position = vbar.position = 0; // reset scrollbars
-                Properties.processActions();
-            }
+
+            onEnabledChanged: Properties.processActions();
+            onWidthChanged:  scaledWidth  = support.getScaledValue( width );
+            onHeightChanged: scaledHeight = support.getScaledValue( height );
 
             function clearImage() {
-                ImageProvider.clear();
-                snippedImage.enabled = false;
+               ImageProvider.clear();
+               snippedImage.enabled = false;
+            }
+
+            property int scaledWidth:  0;
+            property int scaledHeight: 0;
+        }
+
+        ScrollBar.vertical: ScrollBar {
+            visible: flickable.height < snippedImage.scaledHeight;
+            anchors {
+                top:    flickable.top;
+                bottom: flickable.bottom;
+                right:  flickable.right;
+            }
+
+            contentItem: Rectangle {
+                 color: "grey";
             }
         }
-    }
 
-    ScrollBar {
-        id: vbar;
-        orientation: Qt.Vertical;
-        size: frame.height / snippedImage.implicitHeight;
-        visible: frame.height < snippedImage.implicitHeight;
+        ScrollBar.horizontal: ScrollBar {
+            visible: flickable.width < snippedImage.scaledWidth;
+            anchors {
+                left:   flickable.left;
+                right:  flickable.right;
+                bottom: flickable.bottom;
+            }
 
-        anchors{
-            top: parent.top;
-            topMargin: marginSize;
-            bottom: parent.bottom;
-            bottomMargin: marginSize;
-            right: parent.right;
-        }
-    }
-
-    ScrollBar {
-        id: hbar
-        orientation: Qt.Horizontal;
-        size: frame.width / snippedImage.implicitWidth;
-        visible: frame.width < snippedImage.implicitWidth;
-
-        anchors {
-            left: parent.left;
-            leftMargin: marginSize;
-            right: parent.right;
-            rightMargin: marginSize;
-            bottom: parent.bottom;
+            contentItem: Rectangle {
+                 color: "grey";
+            }
         }
     }
 
