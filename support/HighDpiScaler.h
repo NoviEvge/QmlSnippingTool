@@ -6,8 +6,8 @@
 class HighDPIScaler
 {
 public:
-    QRect scale(const QRect &rect) const;
-    QRect unscale(const QRect &rect) const;
+    QRect scale(   const QRect &rect ) const;
+    QRect unscale( const QRect &rect ) const;
     qreal scaleFactor() const;
 };
 

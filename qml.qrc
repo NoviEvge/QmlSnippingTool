@@ -1,11 +1,20 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>ScreenshotWindow.qml</file>
-        <file>Sources/clipboard.svg</file>
-        <file>Sources/scissors.svg</file>
-        <file>Sources/save.svg</file>
-        <file>Sources/reset.svg</file>
-        <file>Sequences.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/ScreenshotWindow.qml</file>
+        <file>qml/Sequences.qml</file>
+        <file>qml/SettingsWindow.qml</file>
+        <file>qml/DelayBox.qml</file>
+        <file>qml/ActionButtons.qml</file>
+        <file>qml/SaveFileDialog.qml</file>
+        <file>qml/Support.qml</file>
+        <file>qml/Properties.qml</file>
+        <file>qml/Constants.qml</file>
+        <file>qml/qmldir</file>
+        <file>qml/images/clipboard.svg</file>
+        <file>qml/images/reset.svg</file>
+        <file>qml/images/save.svg</file>
+        <file>qml/images/scissors.svg</file>
+        <file>qml/images/settings.svg</file>
     </qresource>
 </RCC>

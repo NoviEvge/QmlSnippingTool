@@ -1,0 +1,3 @@
+module Support
+singleton Properties 1.0 Properties.qml
+singleton Constants 1.0 Constants.qml

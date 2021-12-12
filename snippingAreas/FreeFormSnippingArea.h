@@ -9,8 +9,8 @@ class FreeFormSnippingArea : public BaseSnippingArea
 {
 protected:
     virtual void mousePress( QPoint point ) override;
-    virtual void mouseRelease( QPoint) override;
-    virtual void mouseMove( QPoint point ) override;
+    virtual void mouseRelease( QPoint )     override;
+    virtual void mouseMove( QPoint point )  override;
 
 private:
     void insertPoint( QPoint point );

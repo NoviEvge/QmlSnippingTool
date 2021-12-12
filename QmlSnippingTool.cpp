@@ -1,10 +1,10 @@
-#include "SnippingTool.h"
+#include "QmlSnippingTool.h"
 
 #include "snippingAreas/RectangleSnippingArea.h"
 #include "snippingAreas/FreeFormSnippingArea.h"
 #include "snippingAreas/FullscreenSnippingArea.h"
 
-SnippingTool::SnippingTool()
+QmlSnippingTool::QmlSnippingTool()
 {
     imageProvider_m = new ImageProvider();
     captureMode_m = new CaptureMode();
@@ -13,18 +13,18 @@ SnippingTool::SnippingTool()
     QObject::connect( captureMode_m,
                       &CaptureMode::captureModeChanged,
                       this,
-                      &SnippingTool::captureModeChanged );
+                      &QmlSnippingTool::captureModeChanged );
 }
 
-void SnippingTool:: captureModeChanged(CaptureModes mode)
+void QmlSnippingTool:: captureModeChanged( CaptureModes mode )
 {
     switch( mode )
     {
         case CaptureModes::eRectangle:
-            snippingArea_m.reset( new RectangleSnippingArea);
+            snippingArea_m.reset( new RectangleSnippingArea );
             break;
         case CaptureModes::eFreeForm:
-            snippingArea_m.reset( new FreeFormSnippingArea);
+            snippingArea_m.reset( new FreeFormSnippingArea );
             break;
         case CaptureModes::eFullScreen:
             snippingArea_m.reset( new FullscreenSnippingArea );
@@ -52,14 +52,19 @@ void SnippingTool:: captureModeChanged(CaptureModes mode)
                       &RectangleSnippingArea::forceFinish,
                       imageProvider_m,
                       &ImageProvider::forceFinish);
+
+    QObject::connect( snippingArea_m.get(),
+                      &RectangleSnippingArea::finished,
+                      imageProvider_m,
+                      &ImageProvider::finished);
 }
 
-ImageProvider *SnippingTool::imageProvider() const
+ImageProvider *QmlSnippingTool::imageProvider() const
 {
     return imageProvider_m;
 }
 
-CaptureMode *SnippingTool::captureMode() const
+CaptureMode *QmlSnippingTool::captureMode() const
 {
     return captureMode_m;
 }

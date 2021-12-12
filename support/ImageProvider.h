@@ -10,21 +10,22 @@ class ImageProvider : public QQuickImageProvider
 
 public:
     ImageProvider();
-    QImage requestImage(const QString &id, QSize *size, const QSize&);
-
+    QImage requestImage( const QString& id, QSize* size, const QSize& requestedSize ) override;
     Q_INVOKABLE void clear();
 
+    virtual ~ImageProvider() override = default;
 signals:
-    void signalNewFrameReady();
+    void newFrameReady();
     void screenshotCreated();
     void screenshotFinished();
     void forceFinish();
+    void finished();
 
 private:
     QImage takeScreenshot();
 
 public slots:
-    void screenshotUpdated(QImage image );
+    void screenshotUpdated( QImage image );
 
 private:
     QImage image_m;

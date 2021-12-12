@@ -1,8 +1,8 @@
 #include "FullscreenSnippingArea.h"
-#include "support/ImagesContainer.h"
+#include "ImagesContainer.h"
 
-void FullscreenSnippingArea::mousePress(QPoint)
+void FullscreenSnippingArea::mousePress( QPoint )
 {
     auto image = ImagesContainer::instance()->getOriginalImage();
-    emit screenshotUpdated(image);
+    emit screenshotUpdated( image );
 }

@@ -1,27 +1,26 @@
 #include "ImageProvider.h"
+#include "ImagesContainer.h"
 
 #include <QGuiApplication>
 #include <QScreen>
 #include <QPainter>
 
-#include <support/ImagesContainer.h>
-
-ImageProvider::ImageProvider() : QQuickImageProvider(QQuickImageProvider::Image)
+ImageProvider::ImageProvider() : QQuickImageProvider( QQuickImageProvider::Image )
 {
 }
 
-QImage ImageProvider::requestImage(const QString &id, QSize *size, const QSize &)
+QImage ImageProvider::requestImage( const QString& id, QSize* size, const QSize& )
 {
-    if( id == "screenshot")
+    if( id == "screenshot" )
     {
         image_m = takeScreenshot();
 
         emit screenshotCreated();
     }
-    else if ( id == "snipped" )
+    else if( id == "snipped" )
     {
         image_m = ImagesContainer::instance()->getOriginalImage();
-        if (image_m.isNull())
+        if( image_m.isNull() )
         {
             takeScreenshot();
             image_m = ImagesContainer::instance()->getOriginalImage();
@@ -30,11 +29,8 @@ QImage ImageProvider::requestImage(const QString &id, QSize *size, const QSize &
         emit screenshotFinished();
     }
 
-    if ( !image_m.isNull() )
-    {
-        size->setWidth( image_m.width() );
-        size->setHeight( image_m.height() );
-    }
+    if( !image_m.isNull() )
+        *size = image_m.size();
 
     return image_m;
 }
@@ -51,16 +47,16 @@ void ImageProvider::clear()
 QImage ImageProvider::takeScreenshot()
 {
     QImage image;
-    QScreen *screen = QGuiApplication::primaryScreen();
-    if (screen)
+    QScreen* screen = QGuiApplication::primaryScreen();
+    if( screen )
     {
-        image = screen->grabWindow(0).toImage();
-        image.convertTo(QImage::Format_ARGB32);
+        image = screen->grabWindow( 0 ).toImage();
+        image.convertTo( QImage::Format_ARGB32 );
 
-        ImagesContainer::instance()->setOriginalImage( image );
+        ImagesContainer::instance()->setOriginalImage(image);
 
-        QPainter p(&image);
-        p.fillRect(image.rect(),QColor( 128, 128, 128, 80));
+        QPainter p{ &image };
+        p.fillRect( image.rect(), QColor( 128, 128, 128, 80 ) );
 
         ImagesContainer::instance()->setEditableImage( image );
     }
@@ -68,9 +64,9 @@ QImage ImageProvider::takeScreenshot()
     return image;
 }
 
-void ImageProvider::screenshotUpdated(QImage image )
+void ImageProvider::screenshotUpdated( QImage image )
 {
     image_m = image;
 
-    emit signalNewFrameReady();
+    emit newFrameReady();
 }

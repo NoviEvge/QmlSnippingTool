@@ -3,14 +3,14 @@
 #include <QGuiApplication>
 #include <QMouseEvent>
 
-QObject* MouseEventHandler::singletoneInstance(QQmlEngine*, QJSEngine*)
+QObject* MouseEventHandler::singletoneInstance( QQmlEngine*, QJSEngine* )
 {
     auto object = instance();
     static bool isInited = false;
     if( !isInited )
     {
         QGuiApplication* app = qGuiApp;
-        app->installEventFilter(object);
+        app->installEventFilter( object );
         isInited = true;
     }
 
@@ -26,14 +26,14 @@ MouseEventHandler* MouseEventHandler::instance()
     return object;
 }
 
-bool MouseEventHandler::eventFilter(QObject* sender, QEvent* event)
+bool MouseEventHandler::eventFilter( QObject* sender, QEvent* event )
 {
     QEvent::Type eventType = event->type();
-    if ( eventType == QEvent::MouseButtonPress ||
-         eventType == QEvent::MouseButtonRelease ||
-         eventType == QEvent::MouseMove)
+    if( eventType == QEvent::MouseButtonPress   ||
+        eventType == QEvent::MouseButtonRelease ||
+        eventType == QEvent::MouseMove )
     {
-        QMouseEvent* evt = static_cast<QMouseEvent*>(event);
+        QMouseEvent* evt = static_cast< QMouseEvent* >( event );
         if( isMouseEventAllowed( evt ) )
             emit mouseEvent( evt->pos(), eventType );
 
@@ -43,7 +43,7 @@ bool MouseEventHandler::eventFilter(QObject* sender, QEvent* event)
             lastEventType_m = eventType;
     }
 
-    return QObject::eventFilter(sender, event);
+    return QObject::eventFilter( sender, event );
 }
 
 bool MouseEventHandler::isMouseEventAllowed( const QMouseEvent* event )
