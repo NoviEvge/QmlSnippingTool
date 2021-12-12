@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.21)
 project(QmlSnippingTool)
 
 set(CMAKE_AUTOMOC ON)
@@ -9,6 +9,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_CXX_FLAGS_DEBUG  "-g -Wall -Wextra -Wpedantic -Werror")
 
 set(INSTALLED_QT_VERSION 6)
 
@@ -41,5 +43,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} Qt${INSTALLED_QT_VERSION}::Gui)
 target_link_libraries(${CMAKE_PROJECT_NAME} snippingAreas)
 target_link_libraries(${CMAKE_PROJECT_NAME} support)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/debug)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/release)
+set_target_properties(QmlSnippingTool PROPERTIES
+                      RUNTIME_OUTPUT_DIRECTORY_DEBUG ../bin/Debug
+                      RUNTIME_OUTPUT_DIRECTORY_RELEASE ../bin/Release
+)
