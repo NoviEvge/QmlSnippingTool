@@ -1,7 +1,8 @@
-#ifndef FILEOPERATIONSMANAGER_H
-#define FILEOPERATIONSMANAGER_H
+#pragma once
 
 #include <QObject>
+
+namespace utility::fileOperations {
 
 class FileOperationsManager : public QObject
 {
@@ -12,4 +13,4 @@ public:
     Q_INVOKABLE void saveFile( QString filePath );
 };
 
-#endif // FILEOPERATIONSMANAGER_H
+} // utility::fileOperations

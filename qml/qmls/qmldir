@@ -1,0 +1,4 @@
+module Support
+singleton Constants 1.0 Constants.qml
+singleton Preferences 1.0 Preferences.qml
+singleton TemplatePreferences 1.0 TemplatePreferences.qml
