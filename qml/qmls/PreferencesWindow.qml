@@ -4,162 +4,227 @@ import QtQuick.Controls
 import Qt.labs.platform
 import QtQuick.Controls.Material
 
-ApplicationWindow {
+Window {
 
-    width:  Math.max( basePreferencesLayout.implicitWidth,  drawingPreferencesLayout.implicitWidth  );
-    height: Math.max( basePreferencesLayout.implicitHeight, drawingPreferencesLayout.implicitHeight ) + toolBar.height;
+    width:  layout.implicitWidth  + Constants.bigMarginSize;
+    height: layout.implicitHeight + Constants.bigMarginSize;
     minimumWidth : width;
     minimumHeight: height;
     maximumWidth:  width;
     maximumHeight: height;
     modality: Qt.WindowModal
 
-    onClosing: {
-        Preferences.setDelay( defaultDelay.currentIndex );
-        Preferences.setAutoCopyToClipboard( copyToClipboard.checked );
-        Preferences.setAutoSaveToFolder( autoSaveToFolder.checked );
-        Preferences.setSaveFolderPath( folderDialog.getFolderUrl() );
-        Preferences.setFileTypeIndex( fileType.currentIndex );
-        Preferences.setFileType( fileType.currentValue );
+    onClosing: destroy();
 
-        destroy();
-    }
+    ColumnLayout {
+        id: layout;
+        anchors.centerIn: parent;
 
-    header: TabBar {
-        id: toolBar;
-
-        background: Rectangle {
-            color: "#CFD8DC";
-        }
-
-        TabButton {
+        Label {
+            Layout.alignment: Qt.AlignHCenter;
             text: "General";
+            font.pixelSize: Constants.fontPixelSize;
+            font.bold: true;
         }
 
-        TabButton {
-            text: "Drawings";
+        DelayBox {
+            flat: false;
+            Layout.fillWidth: true;
+            currentIndex: Preferences.getDelay();
+            onCurrentIndexChanged: Preferences.setDelay( currentIndex );
         }
-    }
 
-    SwipeView
-    {
-        anchors.fill: parent;
-        currentIndex: toolBar.currentIndex;
+        CheckBox {
+            text: "Always copy to clipboard";
+            checked: Preferences.getAutoCopyToClipboard();
+            onCheckedChanged: Preferences.setAutoCopyToClipboard( checked );
+        }
 
-        ColumnLayout {
-            id: basePreferencesLayout;
+        CheckBox {
+            id: autoSaveToFolder
+            text: "Auto save to folder";
+            checked: Preferences.getAutoSaveToFolder();
+            onCheckedChanged: Preferences.setAutoSaveToFolder( checked )
+        }
+
+        RowLayout {
+            enabled: autoSaveToFolder.checkState;
             spacing: 10;
 
-            DelayBox {
-                id: defaultDelay;
-                currentIndex: Preferences.getDelay();
-                Layout.fillWidth: true;
-            }
+            ColumnLayout {
+                spacing: 0;
 
-            CheckBox {
-                id: copyToClipboard;
-                checked: Preferences.getAutoCopyToClipboard();
-                text: "Always copy to clipboard";
-            }
-
-            CheckBox {
-                id: autoSaveToFolder
-                checked: Preferences.getAutoSaveToFolder();
-                text: "Auto save to folder";
-            }
-
-            RowLayout {
-                enabled: autoSaveToFolder.checkState;
-                spacing: 10;
-
-                ColumnLayout {
-                    spacing: 0;
-
-                    Label {
-                        text: "Folder for captures";
-                    }
-
-                    TextField {
-                        id: defaultFolderPath;
-                        text: folderDialog.getFolderPath();
-                        ToolTip.visible: hovered;
-                        ToolTip.text: folderDialog.getFolderPath() ? folderDialog.getFolderPath() : "Empty ( Documents folder by default )";
-                        ToolTip.delay: Constants.tooltipDelay;
-                        onTextEdited: folderDialog.setFolderPath( text );
-                        onTextChanged: setCursorToStart();
-                        onFocusChanged: setCursorToStart();
-
-                        function setCursorToStart() {
-                            if( !focus )
-                                cursorPosition = 0;
-                        }
-                    }
+                Label {
+                    text: "Folder for captures";
                 }
 
-                Button {
-                    text: "Browse";
-                    onClicked: folderDialog.open();
+                TextField {
+                    id: defaultFolderPath;
+                    text: folderDialog.getFolderPath();
+
+                    Layout.fillWidth: true;
+
+                    ToolTip.visible: hovered;
+                    ToolTip.text: folderDialog.getFolderPath() ? folderDialog.getFolderPath() : "Empty ( Documents folder by default )";
+                    ToolTip.delay: Constants.tooltipDelay;
+
+                    onTextEdited: folderDialog.setFolderPath( text );
+                    onTextChanged: setCursorToStart();
+                    onFocusChanged: {
+                        if( !focus )
+                            setCursorToStart();
+                    }
+
+                    function setCursorToStart() {
+                        cursorPosition = 0;
+                        Preferences.setSaveFolderPath( folderDialog.getFolderUrl() );
+                    }
                 }
             }
 
-            ComboBox {
-                id: fileType;
-                enabled: autoSaveToFolder.checkState;
-                Layout.fillWidth: true;
-                currentIndex: Preferences.getFileTypeIndex();
-                displayText: "File type: " + currentValue;
-                model: [ ".png", ".jpg", ".jpeg", ".bmp" ];
+            Button {
+                text: "Browse";
+                onClicked: folderDialog.open();
             }
         }
 
-        ColumnLayout {
-            id: drawingPreferencesLayout;
+        ComboBox {
+            id: fileType;
+            enabled: autoSaveToFolder.checkState;
+            Layout.fillWidth: true;
+            currentIndex: Preferences.getFileTypeIndex();
+            displayText: "File type: " + currentValue;
+            model: [ ".png", ".jpg", ".jpeg", ".bmp" ];
 
-            ColumnLayout {
-                id: drawingsLayout;
+            onCurrentValueChanged: {
+                Preferences.setFileTypeIndex( currentIndex );
+                Preferences.setFileType( model[currentIndex] );
+            }
+        }
 
-                ColumnLayout {
-                    spacing: 0;
+        Label {
+            Layout.alignment: Qt.AlignHCenter;
+            Layout.topMargin: 10;
 
-                    Label {
-                        text: "Pen width and color";
-                    }
+            text: "Drawings"
+            font.pixelSize: Constants.fontPixelSize;
+            font.bold: true;
+        }
 
-                    RowLayout {
-                        SpinBox {
-                            editable: true;
-                            from: 1;
-                            to: 100;
-                            value: Preferences.getPenWidth();
-                        }
+        GridLayout {
+            columns: 3
+            rows: 3;
+
+            Label {
+                text: "Pen: ";
+            }
+
+            ExtendedRoundButton {
+                id: penColorControl;
+
+                Layout.bottomMargin: -10;
+
+                implicitWidth:  30;
+                implicitHeight: 30;
+
+                onClicked: penPalettePopup.open();
+
+                Popup {
+                    id: penPalettePopup;
+
+                    y: -height + parent.height / 2 ;
+                    x: parent.width / 2;
+
+                    ColorPalette {
+                        Component.onCompleted: updateCurrentColor( Preferences.getPenColor() );
+
+                        onColorChanged: ( color ) => {
+                                            penColorControl.color = color;
+                                            Preferences.setPenColor( color );
+                                        }
                     }
                 }
+            }
 
-                ColumnLayout {
-                    spacing: 0;
+            WidthSlider{
+                Component.onCompleted: updateCurrentWidth( Preferences.getPenWidth() );
 
-                    Label {
-                        text: "Highlighter width and color";
-                    }
+                onWidthChanged: ( width ) => Preferences.setPenWidth( width );
+            }
 
-                    RowLayout {
-                        SpinBox {
-                            editable: true;
-                            from: 1;
-                            to: 100;
-                            value: Preferences.getHighlighterWidth();
-                        }
+            Label {
+                text: "Highlighter: ";
+            }
+
+            ExtendedRoundButton {
+                id: highlighterColorControl;
+
+                Layout.bottomMargin: -10;
+
+                implicitWidth:  30;
+                implicitHeight: 30;
+
+                onClicked: highlighterPalettePopup.open();
+
+                Popup {
+                    id: highlighterPalettePopup;
+
+                    y: -height + parent.height / 2 ;
+                    x: parent.width / 2;
+
+                    ColorPalette {
+                        Component.onCompleted: updateCurrentColor( Preferences.getHighlighterColor() );
+
+                        onColorChanged: ( color ) => {
+                                            highlighterColorControl.color = color;
+                                            Preferences.setHighlighterColor( color );
+                                        }
                     }
                 }
-                ColumnLayout {
-                    spacing: 0;
+            }
 
-                    Label { text: "Selection area color"; }
+            WidthSlider {
+                Component.onCompleted: updateCurrentWidth( Preferences.getHighlighterWidth() );
 
-                    RowLayout {
+                onWidthChanged: ( width ) => Preferences.setHighlighterWidth( width );
+            }
 
+            Label {
+                text: "Selection rect: ";
+            }
+
+            ExtendedRoundButton {
+                id: selectionAreaColorControl;
+                implicitWidth:  30;
+                implicitHeight: 30;
+
+                onClicked: selectionAreaPalettePopup.open();
+
+                Popup
+                {
+                    id: selectionAreaPalettePopup;
+
+                    y: -height + parent.height / 2 ;
+                    x: parent.width / 2;
+
+                    ColorPalette {
+                        Component.onCompleted: updateCurrentColor( Preferences.getSelectionAreaColor() );
+
+                        onColorChanged: ( color ) => {
+                                            selectionAreaColorControl.color = color;
+                                            Preferences.setSelectionAreaColor( color );
+                                        }
                     }
                 }
+            }
+
+            WidthSlider {
+                from: 1;
+                to: 20;
+
+                Component.onCompleted: updateCurrentWidth( Preferences.getSelectionAreaWidth() );
+
+                onWidthChanged: ( width ) => Preferences.setSelectionAreaWidth( width );
             }
         }
     }
@@ -170,7 +235,7 @@ ApplicationWindow {
         folder: Preferences.getSaveFolderPath();
 
         function getFolderUrl() {
-            return getFolderPath() ? folder : Properties.getDefaultSaveFolderPath();
+            return getFolderPath() ? folder : Preferences.getDefaultSaveFolderPath();
         }
 
         function getFolderPath() {
@@ -178,7 +243,7 @@ ApplicationWindow {
         }
 
         function setFolderPath( path ) {
-            folderDialog.folder = "file://" + ( Support.isWindowsOS() ? "/" : "" ) + path;
+            folderDialog.folder = "file://" + ( support.isWindowsOS() ? "/" : "" ) + path;
         }
     }
 

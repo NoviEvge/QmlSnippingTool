@@ -4,6 +4,15 @@ import Qt.labs.platform
 Item {
     function createWindow( qmlFileName ) {
         var component = Qt.createComponent( qmlFileName );
+
+        if( component.status != Component.Ready )
+        {
+            if( component.status == Component.Error )
+                console.debug( "Error: " + component.errorString() );
+
+            return;
+        }
+
         return component.createObject( parent );
     }
 
@@ -59,5 +68,15 @@ Item {
 
     function saveFile( path ) {
         FileOperations.saveFile( path );
+    }
+
+    function hexColorIsLight( color ) {
+        var hex = color.toString().replace('#', '');
+        var c_r = parseInt( hex.substr( 0, 2 ), 16 );
+        var c_g = parseInt( hex.substr( 2, 2 ), 16 );
+        var c_b = parseInt( hex.substr( 4, 2 ), 16 );
+        var brightness = ( ( c_r * 299 ) + ( c_g * 587 ) + ( c_b * 114 ) ) / 1000;
+
+        return brightness > 140;
     }
 }

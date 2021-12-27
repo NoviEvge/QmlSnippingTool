@@ -1,26 +1,72 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Material
-
-import Qt.labs.platform
 import qt.ActionTypesEnum
 
 RowLayout {
     visible: snippedImage.enabled;
     spacing: Constants.marginSize;
 
-    ButtonWithDropDown {
+    CustomWidthButton {
         icon.source: "qrc:/images/pen.svg";
         ToolTip.text: "Pen";
         ToolTip.delay: Constants.tooltipDelay;
         actionType: ActionTypesEnum.Pen;
     }
 
-    ButtonWithDropDown {
+    ExtendedRoundButton {
+        id: penColorControl;
+        implicitWidth:  20;
+        implicitHeight: 20;
+        shadowed: false;
+        onClicked: penColorPicker.open();
+
+        Component.onCompleted: {
+            penColorPicker.updateCurrentColor( TemporaryPreferences.getPenColor() );
+            penColorPicker.updateCurrentWidth( TemporaryPreferences.getPenWidth() );
+        }
+
+        ColorAndWidthPopup {
+            id: penColorPicker;
+
+            onColorChanged: ( color ) => {
+                                 penColorControl.color = color;
+                                 TemporaryPreferences.setPenColor( color );
+                             }
+
+            onWidthChanged: ( width ) => TemporaryPreferences.setPenWidth( width );
+        }
+    }
+
+    CustomWidthButton {
         icon.source: "qrc:/images/highlighter.svg";
         ToolTip.text: "Highlighter";
         ToolTip.delay: Constants.tooltipDelay;
         actionType: ActionTypesEnum.Highlighter;
+    }
+
+    ExtendedRoundButton {
+        id: highlighterColorControl;
+        implicitWidth:  20;
+        implicitHeight: 20;
+        shadowed: false;
+        onClicked: highlighterColorPicker.open();
+
+        Component.onCompleted: {
+            highlighterColorPicker.updateCurrentColor( TemporaryPreferences.getHighlighterColor() );
+            highlighterColorPicker.updateCurrentWidth( TemporaryPreferences.getHighlighterWidth() );
+        }
+
+        ColorAndWidthPopup {
+            id: highlighterColorPicker;
+
+            onColorChanged: ( color ) => {
+                                 highlighterColorControl.color = color;
+                                 TemporaryPreferences.setHighlighterColor( color );
+                             }
+
+            onWidthChanged: ( width ) => TemporaryPreferences.setHighlighterWidth( width );
+        }
     }
 
     CustomWidthButton {
@@ -31,6 +77,7 @@ RowLayout {
         ToolTip.delay: Constants.tooltipDelay;
         onClicked: ActionManager.undoLastAction();
         actionType: ActionTypesEnum.Undo;
+        actionsAllowed: false;
     }
 
     CustomWidthButton {
@@ -41,6 +88,7 @@ RowLayout {
         ToolTip.delay: Constants.tooltipDelay;
         onClicked: ActionManager.redoLastAction();
         actionType: ActionTypesEnum.Redo;
+        actionsAllowed: false;
     }
 
     function refreshUndoRedoButtons() {

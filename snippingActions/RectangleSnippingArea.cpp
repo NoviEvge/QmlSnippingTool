@@ -43,7 +43,7 @@ void RectangleSnippingArea::mouseMove( QPoint point )
     QPen pen{ getColor(), getWidth(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin };
     painter.setPen( pen );
 
-    selectionArea += QMargins( 1, 1, 1, 1 );
+    selectionArea += QMargins( getWidth() / 2, getWidth() / 2, getWidth() / 2, getWidth() / 2 );
     painter.drawRect( selectionArea);
 
     emit imageUpdated( editImage, ImageState::Template );

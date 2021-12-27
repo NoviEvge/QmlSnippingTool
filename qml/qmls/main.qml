@@ -3,7 +3,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Controls.Material
-
+import Qt.labs.platform
 import qt.SnippingAreaEnum
 import qt.ActionTypesEnum
 
@@ -14,7 +14,7 @@ ApplicationWindow {
     maximumWidth:  Screen.desktopAvailableWidth;
     maximumHeight: Screen.desktopAvailableHeight;
     minimumWidth:  rowLayout.implicitWidth;
-    minimumHeight: rowLayout.implicitHeight + createBtn.height * ( createBtn.count - 0.5 );
+    minimumHeight: rowLayout.implicitHeight + captureBox.height * ( captureBox.count - 0.5 );
     width:  Math.max( minimumWidth, snippedImage.scaledWidth + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
     height: Math.max( minimumHeight, rowLayout.implicitHeight + snippedImage.scaledHeight + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
 
@@ -29,13 +29,13 @@ ApplicationWindow {
             id: rowLayout;
             spacing: Constants.marginSize;
 
-            ButtonWithDropDown {
+            ExtendedButton {
                 id: createBtn;
                 text: "Create";
                 icon.source: "qrc:/images/scissors.svg";
 
                 property var startFunction: function() {
-                    if( createBtn.currentIndex === SnippingAreaEnum.FullScreen ) {
+                    if( captureBox.currentIndex + 1 === SnippingAreaEnum.FullScreen ) {
                         snippedImage.enabled = true;
                         mainWindow.show();
                     }
@@ -49,6 +49,12 @@ ApplicationWindow {
                     mainWindow.hide();
                     support.delay( 250 + delayBox.sleepValue, startFunction );
                 }
+            }
+
+            ComboBox {
+                id: captureBox;
+                flat: Constants.isFlatElements;
+                hoverEnabled: Constants.isHoverable;
 
                 model: ListModel {
                     ListElement { text: "Rectangle"  }
@@ -123,11 +129,13 @@ ApplicationWindow {
             ExtendedImage {
                 id: drawingActionImage;
 
-                enabled: snippedImage.enabled && ( onPressCreationType !== ActionTypesEnum.None || source != "" );
+                enabled: snippedImage.enabled;
+                actionsAllowed: false;
 
                 sendMouseEventSignalCaller: ActionManager;
                 onFinishedCallback: function() {
                     drawingActionButtons.refreshUndoRedoButtons();
+                    Preferences.processActions();
                 }
             }
         }
@@ -141,7 +149,7 @@ ApplicationWindow {
             }
 
             contentItem: Rectangle {
-                 color: "grey";
+                color: "grey";
             }
         }
 
@@ -154,7 +162,7 @@ ApplicationWindow {
             }
 
             contentItem: Rectangle {
-                 color: "grey";
+                color: "grey";
             }
         }
     }

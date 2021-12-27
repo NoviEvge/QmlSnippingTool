@@ -4,7 +4,6 @@
 #include "ImageProviderEnum.h"
 
 #include <QImage>
-#include <QPoint>
 
 class BaseAction : public IMouseEvents
 {

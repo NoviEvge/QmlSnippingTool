@@ -14,12 +14,12 @@ Window {
         id: image;
 
         source: "image://ImageProvider/screenshot";
-        scale: support.isWindowsOS() ? support.scaleFactor() : scale;
+       // scale: support.isWindowsOS() ? support.scaleFactor() : scale;
 
         sendMouseEventSignalCaller: SnippingAreaManager;
-        onPressCreationColorFunc: function() { return Preferences.getSnippingColor(); }
-        onPressCreationWidthFunc: function() { return Preferences.getSnippingWidth(); }
-        onPressCreationType: 1;//createBtn.currentIndex;
+        onPressCreationColorFunc: function() { return Preferences.getSelectionAreaColor(); }
+        onPressCreationWidthFunc: function() { return Preferences.getSelectionAreaWidth(); }
+        onPressCreationType: captureBox.currentIndex + 1;
 
         onFinishedCallback: function( status ) {
             if ( ImageProviderEnum.ForcedExit === status ) {

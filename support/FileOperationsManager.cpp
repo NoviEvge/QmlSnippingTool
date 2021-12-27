@@ -17,7 +17,6 @@ void FileOperationsManager::saveFile( QString filePath )
     QFileInfo fileInfo{ filePath };
     QDir().mkpath( fileInfo.dir().path() );
 
-    qDebug() <<ImageProvider::instance()->getCurrentImage();
     ImageProvider::instance()->getCurrentImage().save( filePath );
 }
 

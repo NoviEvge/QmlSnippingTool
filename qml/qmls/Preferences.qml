@@ -92,7 +92,7 @@ Item {
         property color highlighterColor: "yellow";
         property int highlighterWidth: 5;
 
-        property color snippingColor: "green";
+        property color snippingColor: "red";
         property int snippingWidth: 1;
     }
 
@@ -128,19 +128,19 @@ Item {
         return drawingSettings.highlighterWidth;
     }
 
-    function setSnippingColor( value ) {
+    function setSelectionAreaColor( value ) {
         drawingSettings.snippingColor = value;
     }
 
-    function getSnippingColor() {
+    function getSelectionAreaColor() {
         return drawingSettings.snippingColor;
     }
 
-    function setSnippingWidth( value ) {
+    function setSelectionAreaWidth( value ) {
         drawingSettings.snippingWidth = value;
     }
 
-    function getSnippingWidth() {
+    function getSelectionAreaWidth() {
         return drawingSettings.snippingWidth;
     }
 

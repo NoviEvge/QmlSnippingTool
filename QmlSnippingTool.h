@@ -3,8 +3,6 @@
 #include "ActionManager.h"
 #include "SnippingAreaManager.h"
 
-#include <QObject>
-
 class QmlSnippingTool : public QObject
 {
     Q_OBJECT

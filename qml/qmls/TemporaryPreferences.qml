@@ -1,3 +1,5 @@
+pragma Singleton
+
 import QtQuick 2.0
 import qt.ActionTypesEnum
 
@@ -5,11 +7,19 @@ Item {
     Item {
         id: actionsPreferences;
 
-        property color penColor: Preferences.getPenColor();
-        property int   penWidth: Preferences.getPenWidth();
+        property color penColor: "red" ;
+        property int   penWidth: 5;
 
-        property color highlighterColor: Preferences.getHighlighterColor();
-        property int   highlighterWidth: Preferences.getHighlighterWidth();
+        property color highlighterColor: "yellow";
+        property int   highlighterWidth: 5;
+
+        Component.onCompleted: {
+            penColor = Preferences.getPenColor();
+            penWidth = Preferences.getPenWidth();
+
+            highlighterColor = Preferences.getHighlighterColor();
+            highlighterWidth = Preferences.getHighlighterWidth();
+        }
     }
 
     function setPenColor( value ) {

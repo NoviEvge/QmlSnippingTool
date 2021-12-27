@@ -2,7 +2,7 @@
 
 #include "BaseAction.h"
 
-#include <QList>
+#include <QPainterPath>
 
 class HighlighterAction : public BaseAction
 {
@@ -15,10 +15,10 @@ protected:
     virtual void mouseMove(    QPoint point ) override;
 
 private:
-    void insertPoint( QPoint point );
     void drawImage( QPoint point );
 
 private:
-    QList< QPoint > dots_m;
     QPoint lastPoint_m;
+    float colorAlpha_m;
+    QPainterPath polygon_m;
 };

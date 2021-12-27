@@ -41,8 +41,6 @@ void FreeFormSnippingArea::mouseRelease( QPoint )
 
     emit imageUpdated( newImage.copy( polygonRect ), ImageState::SnippingFinal );
 
-    polygons_m.clear();
-
     emit finished( FinishStatus::Normal );
 }
 

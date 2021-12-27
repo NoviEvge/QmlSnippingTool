@@ -6,10 +6,14 @@ Button {
     hoverEnabled: Constants.isHoverable;
 
     property int actionType: ActionTypesEnum.None;
+    property bool actionsAllowed: true;
 
     onClicked: {
-        drawingActionImage.onPressCreationType = actionType;
-        drawingActionImage.onPressCreationColorFunc = function() { return TemporaryPreferences.getActionColor( actionType ); }
-        drawingActionImage.onPressCreationWidthFunc = function() { return TemporaryPreferences.getActionWidth( actionType ); }
+        if( actionType != ActionTypesEnum.None ) {
+            drawingActionImage.onPressCreationType = actionType;
+            drawingActionImage.onPressCreationColorFunc = function() { return TemporaryPreferences.getActionColor( actionType ); }
+            drawingActionImage.onPressCreationWidthFunc = function() { return TemporaryPreferences.getActionWidth( actionType ); }
+            drawingActionImage.actionsAllowed = actionsAllowed;
+        }
     }
 }
