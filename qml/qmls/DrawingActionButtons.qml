@@ -30,9 +30,9 @@ RowLayout {
             id: penColorPicker;
 
             onColorChanged: ( color ) => {
-                                 penColorControl.color = color;
-                                 TemporaryPreferences.setPenColor( color );
-                             }
+                                penColorControl.color = color;
+                                TemporaryPreferences.setPenColor( color );
+                            }
 
             onWidthChanged: ( width ) => TemporaryPreferences.setPenWidth( width );
         }
@@ -43,30 +43,6 @@ RowLayout {
         ToolTip.text: "Highlighter";
         ToolTip.delay: Constants.tooltipDelay;
         actionType: ActionTypesEnum.Highlighter;
-    }
-
-    ExtendedRoundButton {
-        id: highlighterColorControl;
-        implicitWidth:  20;
-        implicitHeight: 20;
-        shadowed: false;
-        onClicked: highlighterColorPicker.open();
-
-        Component.onCompleted: {
-            highlighterColorPicker.updateCurrentColor( TemporaryPreferences.getHighlighterColor() );
-            highlighterColorPicker.updateCurrentWidth( TemporaryPreferences.getHighlighterWidth() );
-        }
-
-        ColorAndWidthPopup {
-            id: highlighterColorPicker;
-
-            onColorChanged: ( color ) => {
-                                 highlighterColorControl.color = color;
-                                 TemporaryPreferences.setHighlighterColor( color );
-                             }
-
-            onWidthChanged: ( width ) => TemporaryPreferences.setHighlighterWidth( width );
-        }
     }
 
     CustomWidthButton {

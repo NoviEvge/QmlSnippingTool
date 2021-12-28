@@ -2,8 +2,6 @@
 
 #include "BaseAction.h"
 
-#include <QPainterPath>
-
 class HighlighterAction : public BaseAction
 {
 public:
@@ -19,6 +17,4 @@ private:
 
 private:
     QPoint lastPoint_m;
-    float colorAlpha_m;
-    QPainterPath polygon_m;
 };

@@ -112,10 +112,6 @@ Item {
         return drawingSettings.penWidth;
     }
 
-    function setHighlighterColor( value ) {
-        drawingSettings.highlighterColor = value;
-    }
-
     function getHighlighterColor() {
         return drawingSettings.highlighterColor;
     }

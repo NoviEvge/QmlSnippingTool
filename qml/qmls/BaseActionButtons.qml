@@ -24,7 +24,7 @@ RowLayout {
         }
 
         CustomWidthButton {
-            onClicked: snippedImage.clearImage();
+            onClicked: mainWindow.resetState();
             icon.source: "qrc:/images/reset.svg";
             ToolTip.text: "Remove( Del, Ctrl+D )";
             ToolTip.delay: Constants.tooltipDelay;

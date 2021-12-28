@@ -38,7 +38,7 @@ Window {
     }
 
     function clearAndFinish() {
-        snippedImage.clearImage();
+        mainWindow.resetState();
         transparentWindow.close();
     }
 

@@ -157,30 +157,14 @@ Window {
             }
 
             ExtendedRoundButton {
-                id: highlighterColorControl;
-
-                Layout.bottomMargin: -10;
+                enabled: false;
+                hoverEnabled: false;
 
                 implicitWidth:  30;
                 implicitHeight: 30;
 
-                onClicked: highlighterPalettePopup.open();
-
-                Popup {
-                    id: highlighterPalettePopup;
-
-                    y: -height + parent.height / 2 ;
-                    x: parent.width / 2;
-
-                    ColorPalette {
-                        Component.onCompleted: updateCurrentColor( Preferences.getHighlighterColor() );
-
-                        onColorChanged: ( color ) => {
-                                            highlighterColorControl.color = color;
-                                            Preferences.setHighlighterColor( color );
-                                        }
-                    }
-                }
+                color: Preferences.getHighlighterColor();
+                Layout.bottomMargin: -10;
             }
 
             WidthSlider {
@@ -195,6 +179,7 @@ Window {
 
             ExtendedRoundButton {
                 id: selectionAreaColorControl;
+
                 implicitWidth:  30;
                 implicitHeight: 30;
 

@@ -38,10 +38,6 @@ Item {
         return actionsPreferences.penWidth;
     }
 
-    function setHighlighterColor( value ) {
-        actionsPreferences.highlighterColor = value;
-    }
-
     function getHighlighterColor() {
         return actionsPreferences.highlighterColor;
     }

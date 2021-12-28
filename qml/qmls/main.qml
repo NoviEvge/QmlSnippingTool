@@ -11,15 +11,18 @@ ApplicationWindow {
     id: mainWindow;
     visible: true;
 
-    maximumWidth:  Screen.desktopAvailableWidth;
-    maximumHeight: Screen.desktopAvailableHeight;
-    minimumWidth:  rowLayout.implicitWidth;
-    minimumHeight: rowLayout.implicitHeight + captureBox.height * ( captureBox.count - 0.5 );
-    width:  Math.max( minimumWidth, snippedImage.scaledWidth + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
-    height: Math.max( minimumHeight, rowLayout.implicitHeight + snippedImage.scaledHeight + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
+    width:  Math.max( mainWindow.minimumWidth,  snippedImage.scaledWidth + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
+    height: Math.max( mainWindow.minimumHeight, rowLayout.implicitHeight + snippedImage.scaledHeight + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
 
     onWidthChanged:  x = ( ( x + width  ) < maximumWidth  ) ? maximumWidth  * 0.2 : 0;  // 0.2 = 20%,
     onHeightChanged: y = ( ( y + height ) < maximumHeight ) ? maximumHeight * 0.2 : 30; // 0.2 = 20%, position with "main header"
+
+    Component.onCompleted: {
+        maximumWidth  = Screen.desktopAvailableWidth;
+        maximumHeight = Screen.desktopAvailableHeight;
+        minimumWidth  = rowLayout.implicitWidth;
+        minimumHeight = rowLayout.implicitHeight + captureBox.height * ( captureBox.count - 0.5 );
+    }
 
     header: Rectangle {
         height: rowLayout.height;
@@ -45,7 +48,7 @@ ApplicationWindow {
                 }
 
                 onClicked: function() {
-                    snippedImage.clearImage();
+                    resetState();
                     mainWindow.hide();
                     support.delay( 250 + delayBox.sleepValue, startFunction );
                 }
@@ -119,13 +122,6 @@ ApplicationWindow {
             property int scaledWidth:  0;
             property int scaledHeight: 0;
 
-            function clearImage() {
-                ImageProvider.reset();
-                ActionManager.reset();
-                snippedImage.enabled = false;
-                drawingActionButtons.refreshUndoRedoButtons();
-            }
-
             ExtendedImage {
                 id: drawingActionImage;
 
@@ -165,6 +161,13 @@ ApplicationWindow {
                 color: "grey";
             }
         }
+    }
+
+    function resetState() {
+        ImageProvider.reset();
+        ActionManager.reset();
+        snippedImage.enabled = false;
+        drawingActionButtons.refreshUndoRedoButtons();
     }
 
     Support {

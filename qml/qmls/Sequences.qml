@@ -18,7 +18,7 @@ Item {
 
     Shortcut {
         sequences: [ StandardKey.Delete ];
-        onActivated: snippedImage.clearImage();
+        onActivated: mainWindow.resetState();
     }
 
     Shortcut {
@@ -27,14 +27,12 @@ Item {
     }
 
     Shortcut {
-        enabled: ActionManager.isUndoActions();
         sequence: "Ctrl+Z";
         onActivated: ActionManager.undoLastAction();
     }
 
     Shortcut {
-       enabled: ActionManager.isRedoActions();
-        sequence: "Ctrl+Y, Ctrl+Shit+Z";
+        sequence: "Ctrl+Y";
         onActivated: ActionManager.redoLastAction();
     }
 

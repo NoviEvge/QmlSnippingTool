@@ -1,7 +1,7 @@
 import QtQuick.Controls.Material
 import qt.ActionTypesEnum
 
-Button {
+RoundButton {
     flat: Constants.isFlatElements;
     hoverEnabled: Constants.isHoverable;
 

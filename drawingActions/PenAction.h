@@ -17,5 +17,4 @@ private:
 
 private:
     QPoint lastPoint_m;
-    float colorAlpha_m;
 };
