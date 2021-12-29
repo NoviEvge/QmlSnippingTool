@@ -50,7 +50,19 @@ target_link_libraries(${CMAKE_PROJECT_NAME} imageProvider)
 target_link_libraries(${CMAKE_PROJECT_NAME} snippingActions)
 target_link_libraries(${CMAKE_PROJECT_NAME} drawingActions)
 
-set_target_properties(QmlSnippingTool PROPERTIES
-                      RUNTIME_OUTPUT_DIRECTORY_DEBUG ../bin/Debug
-                      RUNTIME_OUTPUT_DIRECTORY_RELEASE ../bin/Release
-)
+set(BINARY_PATH ${CMAKE_SOURCE_DIR}/build/bin/${CMAKE_BUILD_TYPE})
+set(RUNTIME_OUTPUT_DIRECTORY_TYPE "RUNTIME_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE}")
+string(TOUPPER ${RUNTIME_OUTPUT_DIRECTORY_TYPE} RUNTIME_OUTPUT_DIRECTORY_TYPE)
+
+set_target_properties(QmlSnippingTool PROPERTIES ${RUNTIME_OUTPUT_DIRECTORY_TYPE} ${BINARY_PATH})
+
+configure_file("${CMAKE_SOURCE_DIR}/cmake/Deployment.json.in" "${CMAKE_BINARY_DIR}/Deployment.json")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
+                POST_BUILD
+                COMMAND cqtdeployer
+                -confFile "${CMAKE_BINARY_DIR}/Deployment.json"
+                -icon $<$<PLATFORM_ID:Linux>:${CMAKE_SOURCE_DIR}/icons/icon.png>
+                        $<$<PLATFORM_ID:Windows>:${CMAKE_SOURCE_DIR}/icons/icon.ico>)
+endif()

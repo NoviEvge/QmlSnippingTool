@@ -14,14 +14,16 @@ ApplicationWindow {
     width:  Math.max( mainWindow.minimumWidth,  snippedImage.scaledWidth + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
     height: Math.max( mainWindow.minimumHeight, rowLayout.implicitHeight + snippedImage.scaledHeight + 2 * Constants.bigMarginSize + 1 ); // 2 - both borders
 
-    onWidthChanged:  x = ( ( x + width  ) < maximumWidth  ) ? maximumWidth  * 0.2 : 0;  // 0.2 = 20%,
-    onHeightChanged: y = ( ( y + height ) < maximumHeight ) ? maximumHeight * 0.2 : 30; // 0.2 = 20%, position with "main header"
+    onWidthChanged:  x = ( ( x + width  ) < maximumWidth  ) ? x : 0;
+    onHeightChanged: y = ( ( y + height ) < maximumHeight ) ? y : 30; // 30 - position with "main header"
 
     Component.onCompleted: {
         maximumWidth  = Screen.desktopAvailableWidth;
         maximumHeight = Screen.desktopAvailableHeight;
         minimumWidth  = rowLayout.implicitWidth;
         minimumHeight = rowLayout.implicitHeight + captureBox.height * ( captureBox.count - 0.5 );
+        x = maximumWidth  * 0.3;
+        y = maximumHeight * 0.2;
     }
 
     header: Rectangle {
@@ -31,6 +33,8 @@ ApplicationWindow {
         RowLayout {
             id: rowLayout;
             spacing: Constants.marginSize;
+
+            onImplicitWidthChanged: mainWindow.minimumWidth = rowLayout.implicitWidth;
 
             ExtendedButton {
                 id: createBtn;
