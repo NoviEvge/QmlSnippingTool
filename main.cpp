@@ -1,10 +1,12 @@
+#include "QmlSnippingTool.h"
+#include "ImageProvider.h"
+#include "FileOperationsManager.h"
+#include "SnippingAreaEnum.h"
+#include "ActionTypesEnum.h"
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include "QQmlContext"
-
-#include "QmlSnippingTool.h"
-#include "support/MouseEventHandler.h"
-#include "support/FileOperationsManager.h"
 
 int main( int argc, char *argv[] )
 {
@@ -13,18 +15,21 @@ int main( int argc, char *argv[] )
     app.setOrganizationName( "QmlSnippingTool" );
     app.setApplicationName(  "QmlSnippingTool" );
 
-    qmlRegisterSingletonType< MouseEventHandler >( "MouseEventHandler", 1, 0, "MouseEventHandler", MouseEventHandler::singletoneInstance );
+    qmlRegisterUncreatableType< ImageProviderEnum >( "qt.ImageProviderEnum", 1, 0, "ImageProviderEnum", "Not creatable as it is an enum type" );
+    qmlRegisterUncreatableType< ActionTypesEnum   >( "qt.ActionTypesEnum",   1, 0, "ActionTypesEnum",   "Not creatable as it is an enum type" );
+    qmlRegisterUncreatableType< SnippingAreaEnum  >( "qt.SnippingAreaEnum",  1, 0, "SnippingAreaEnum",  "Not creatable as it is an enum type" );
 
     QmlSnippingTool snippingTool;
     QQmlApplicationEngine engine;
-    engine.addImageProvider( "ImageProvider", snippingTool.imageProvider() );
+    engine.addImageProvider( "ImageProvider", ImageProvider::instance() );
 
     QQmlContext* context = engine.rootContext();
-    context->setContextProperty( "CaptureMode", snippingTool.captureMode() );
-    context->setContextProperty( "ImageProvider", snippingTool.imageProvider() );
-    context->setContextProperty( "FileOperations", new FileOperationsManager() );
+    context->setContextProperty( "FileOperations", new utility::fileOperations::FileOperationsManager() );
+    context->setContextProperty( "ImageProvider", ImageProvider::instance() );
+    context->setContextProperty( "ActionManager", snippingTool.actionManager().data() );
+    context->setContextProperty( "SnippingAreaManager", snippingTool.snippingAreaManager().data() );
 
-    engine.load( "qrc:/qml/main.qml" );
+    engine.load( "qrc:/qmls/main.qml" );
 
     return app.exec();
 }

@@ -1,14 +1,15 @@
 #include "FileOperationsManager.h"
-#include "ImagesContainer.h"
-
+#include "ImageProvider.h"
 #include <QGuiApplication>
 #include <QClipboard>
 #include <QFileInfo>
 #include <QDir>
 
+namespace utility::fileOperations {
+
 void FileOperationsManager::copyToClipboard()
 {
-    QGuiApplication::clipboard()->setImage( ImagesContainer::instance()->getOriginalImage() );
+    QGuiApplication::clipboard()->setImage( ImageProvider::instance()->getCurrentImage() );
 }
 
 void FileOperationsManager::saveFile( QString filePath )
@@ -16,5 +17,7 @@ void FileOperationsManager::saveFile( QString filePath )
     QFileInfo fileInfo{ filePath };
     QDir().mkpath( fileInfo.dir().path() );
 
-    ImagesContainer::instance()->getOriginalImage().save( filePath );
+    ImageProvider::instance()->getCurrentImage().save( filePath );
 }
+
+} // utility::fileOperations

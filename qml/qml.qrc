@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/clipboard.svg</file>
+        <file>images/reset.svg</file>
+        <file>images/save.svg</file>
+        <file>images/scissors.svg</file>
+        <file>images/settings.svg</file>
+        <file>images/highlighter.svg</file>
+        <file>images/pen.svg</file>
+        <file>qmls/BaseActionButtons.qml</file>
+        <file>qmls/Constants.qml</file>
+        <file>qmls/DelayBox.qml</file>
+        <file>qmls/DrawingActionButtons.qml</file>
+        <file>qmls/main.qml</file>
+        <file>qmls/qmldir</file>
+        <file>qmls/Preferences.qml</file>
+        <file>qmls/SaveFileDialog.qml</file>
+        <file>qmls/ScreenshotWindow.qml</file>
+        <file>qmls/Sequences.qml</file>
+        <file>qmls/PreferencesWindow.qml</file>
+        <file>qmls/Support.qml</file>
+        <file>qmls/CustomWidthButton.qml</file>
+        <file>qmls/ExtendedButton.qml</file>
+        <file>qmls/ExtendedImage.qml</file>
+        <file>images/redo.svg</file>
+        <file>images/undo.svg</file>
+        <file>qmls/TemporaryPreferences.qml</file>
+        <file>qmls/ColorAndWidthPopup.qml</file>
+        <file>images/plus.svg</file>
+        <file>qmls/ExtendedRoundButton.qml</file>
+        <file>qmls/WidthSlider.qml</file>
+        <file>qmls/ColorPalette.qml</file>
+    </qresource>
+</RCC>

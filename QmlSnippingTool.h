@@ -1,11 +1,7 @@
-#ifndef QMLSNIPPINGTOOL_H
-#define QMLSNIPPINGTOOL_H
+#pragma once
 
-#include <QObject>
-
-#include "support/CaptureMode.h"
-#include "support/ImageProvider.h"
-#include "snippingAreas/BaseSnippingArea.h"
+#include "ActionManager.h"
+#include "SnippingAreaManager.h"
 
 class QmlSnippingTool : public QObject
 {
@@ -14,16 +10,10 @@ class QmlSnippingTool : public QObject
 public:
     QmlSnippingTool();
 
-    ImageProvider* imageProvider() const;
-    CaptureMode* captureMode() const;
-
-private slots:
-    void captureModeChanged( CaptureModes mode );
+    QSharedPointer< ActionManager > actionManager() const;
+    QSharedPointer< SnippingAreaManager > snippingAreaManager() const;
 
 private:
-    QScopedPointer< BaseSnippingArea > snippingArea_m;
-    ImageProvider* imageProvider_m;
-    CaptureMode* captureMode_m;
+    QSharedPointer< ActionManager > actionManager_m;
+    QSharedPointer< SnippingAreaManager > snippingAreaManager_m;
 };
-
-#endif // QMLSNIPPINGTOOL_H
