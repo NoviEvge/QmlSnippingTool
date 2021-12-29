@@ -10,5 +10,7 @@
 <h2  align="center">Build</h2>
 
 Run **./build.sh** in directory.
+
 Call **./build.sh -H** for see options.
+
 Results will be in **build** directory.
