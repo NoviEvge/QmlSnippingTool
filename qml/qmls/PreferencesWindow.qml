@@ -5,16 +5,20 @@ import Qt.labs.platform
 import QtQuick.Controls.Material
 
 Window {
-
-    width:  layout.implicitWidth  + Constants.bigMarginSize;
-    height: layout.implicitHeight + Constants.bigMarginSize;
-    minimumWidth : width;
-    minimumHeight: height;
-    maximumWidth:  width;
-    maximumHeight: height;
     modality: Qt.WindowModal
 
     onClosing: destroy();
+
+    Component.onCompleted: {
+        width  = layout.implicitWidth  + Constants.bigMarginSize;
+        height = layout.implicitHeight + Constants.bigMarginSize;
+        minimumWidth  = width;
+        minimumHeight = height;
+        maximumWidth  = width;
+        maximumHeight = height;
+        x = Screen.desktopAvailableWidth * 0.3;
+        y = Screen.desktopAvailableHeight * 0.2;
+    }
 
     ColumnLayout {
         id: layout;

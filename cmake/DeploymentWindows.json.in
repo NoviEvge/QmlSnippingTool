@@ -1,0 +1,17 @@
+{
+    "clear": true,
+    "deploySystem": false,
+    "extractPlugins": false,
+    "noCheckRPATH": true,
+    "extractPlugins": true,
+    "qif": true,
+    "bin": "${BINARY_PATH}",
+    "qmlDir": "${CMAKE_SOURCE_DIR}",
+    "noTranslations": true,
+    "qmake": "${CMAKE_PREFIX_PATH}",
+    "targetDir": "${BINARY_PATH}",
+	"recursiveDepth": 5,
+	"extractPlugin": [
+		"C:/Qt/6.2.2/mingw_64/plugins/"
+	]
+}

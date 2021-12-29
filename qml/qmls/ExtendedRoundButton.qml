@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
-Button {
+RoundButton {
     id: control;
 
     width:  30;

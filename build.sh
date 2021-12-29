@@ -67,9 +67,6 @@ while [[ $# -gt 0 ]]; do
     -U|--update)
         updateCache=true;
         ;;
-    *)
-        warningMessage "Unknown parameter $1 is skipped"
-        ;;
     esac
     shift
 done

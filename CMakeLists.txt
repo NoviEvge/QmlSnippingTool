@@ -56,13 +56,14 @@ string(TOUPPER ${RUNTIME_OUTPUT_DIRECTORY_TYPE} RUNTIME_OUTPUT_DIRECTORY_TYPE)
 
 set_target_properties(QmlSnippingTool PROPERTIES ${RUNTIME_OUTPUT_DIRECTORY_TYPE} ${BINARY_PATH})
 
-configure_file("${CMAKE_SOURCE_DIR}/cmake/Deployment.json.in" "${CMAKE_BINARY_DIR}/Deployment.json")
+set(DEPLOYMENT_FILE "Deployment${CMAKE_SYSTEM_NAME}.json")
+configure_file("${CMAKE_SOURCE_DIR}/cmake/${DEPLOYMENT_FILE}.in" "${CMAKE_BINARY_DIR}/${DEPLOYMENT_FILE}")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
-                POST_BUILD
-                COMMAND cqtdeployer
-                -confFile "${CMAKE_BINARY_DIR}/Deployment.json"
-                -icon $<$<PLATFORM_ID:Linux>:${CMAKE_SOURCE_DIR}/icons/icon.png>
-                        $<$<PLATFORM_ID:Windows>:${CMAKE_SOURCE_DIR}/icons/icon.ico>)
+	add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
+					POST_BUILD
+					COMMAND cqtdeployer
+					-confFile "${CMAKE_BINARY_DIR}/${DEPLOYMENT_FILE}"
+					-icon $<$<PLATFORM_ID:Linux>:${CMAKE_SOURCE_DIR}/icons/icon.png>
+						  $<$<PLATFORM_ID:Windows>:${CMAKE_SOURCE_DIR}/icons/icon.ico>)
 endif()

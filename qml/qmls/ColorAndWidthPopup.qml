@@ -19,7 +19,6 @@ Popup {
         widthSlider.updateCurrentWidth( width );
     }
 
-
     ColumnLayout
     {
         anchors.fill: parent;
