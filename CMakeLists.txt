@@ -10,7 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_FLAGS_DEBUG  "-g -Wall -Wextra -Wpedantic -Werror")
+set(CMAKE_CXX_FLAGS_DEBUG  "-g -Wall -Wextra -Wpedantic")
 set(CMAKE_CXX_FLAGS_RELEASE  "-s -O3")
 
 set(INSTALLED_QT_VERSION 6)
@@ -20,25 +20,29 @@ find_package(Qt${INSTALLED_QT_VERSION} COMPONENTS Gui REQUIRED)
 find_package(Qt${INSTALLED_QT_VERSION} COMPONENTS Core REQUIRED)
 find_package(Qt${INSTALLED_QT_VERSION} COMPONENTS Quick REQUIRED)
 
-add_subdirectory(common)
-add_subdirectory(support)
-add_subdirectory(imageProvider)
-add_subdirectory(snippingActions)
-add_subdirectory(drawingActions)
+add_subdirectory(source/common)
+add_subdirectory(source/support)
+add_subdirectory(source/imageProvider)
+add_subdirectory(source/snippingActions)
+add_subdirectory(source/drawingActions)
 
 if(${INSTALLED_QT_VERSION} LESS 6)
     qt5_add_resources( RESOURCES qml/qml.qrc)
 else()
-    qt_add_resources( RESOURCES qml/qml.qrc)
+    qt_add_resources( RESOURCES source/qml/qml.qrc)
 endif()
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp ${RESOURCES})
+add_executable(${CMAKE_PROJECT_NAME} source/main.cpp ${RESOURCES})
+
+if (WIN32)
+    set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY WIN32_EXECUTABLE true)
+endif ()
 
 target_sources( ${CMAKE_PROJECT_NAME}
                 PUBLIC
-                    QmlSnippingTool.h
+                    source/QmlSnippingTool.h
                 PRIVATE
-                    QmlSnippingTool.cpp)
+                    source/QmlSnippingTool.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} Qt${INSTALLED_QT_VERSION}::Qml)
 target_link_libraries(${CMAKE_PROJECT_NAME} Qt${INSTALLED_QT_VERSION}::Core)
@@ -54,16 +58,22 @@ set(BINARY_PATH ${CMAKE_SOURCE_DIR}/build/bin/${CMAKE_BUILD_TYPE})
 set(RUNTIME_OUTPUT_DIRECTORY_TYPE "RUNTIME_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE}")
 string(TOUPPER ${RUNTIME_OUTPUT_DIRECTORY_TYPE} RUNTIME_OUTPUT_DIRECTORY_TYPE)
 
+file(REMOVE_RECURSE ${BINARY_PATH})
+
 set_target_properties(QmlSnippingTool PROPERTIES ${RUNTIME_OUTPUT_DIRECTORY_TYPE} ${BINARY_PATH})
 
-set(DEPLOYMENT_FILE "Deployment${CMAKE_SYSTEM_NAME}.json")
-configure_file("${CMAKE_SOURCE_DIR}/cmake/${DEPLOYMENT_FILE}.in" "${CMAKE_BINARY_DIR}/${DEPLOYMENT_FILE}")
+IF($ENV{CREATE_INSTALLER})
+	set(DEPLOYMENT_FILE "Deployment.json")
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
+	if(UNIX AND NOT APPLE)
+		set(DEPLOYMENT_FILE_PATH "${CMAKE_SOURCE_DIR}/configs/linux/${DEPLOYMENT_FILE}.in" )
+	elseif(WIN32)
+		set(DEPLOYMENT_FILE_PATH "${CMAKE_SOURCE_DIR}/configs/windows/${DEPLOYMENT_FILE}.in" )
+	endif()
+
+	configure_file("${DEPLOYMENT_FILE_PATH}" "${CMAKE_BINARY_DIR}/${DEPLOYMENT_FILE}")
+
 	add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
-					POST_BUILD
-					COMMAND cqtdeployer
-					-confFile "${CMAKE_BINARY_DIR}/${DEPLOYMENT_FILE}"
-					-icon $<$<PLATFORM_ID:Linux>:${CMAKE_SOURCE_DIR}/icons/icon.png>
-						  $<$<PLATFORM_ID:Windows>:${CMAKE_SOURCE_DIR}/icons/icon.ico>)
+					   POST_BUILD
+					   COMMAND cqtdeployer -confFile "${CMAKE_BINARY_DIR}/${DEPLOYMENT_FILE}")
 endif()

@@ -4,6 +4,7 @@ BuildType=""
 ThreadCounts="";
 clean=false;
 updateCache=false;
+createInstaller=false;
 
 help() {
       echo "options:"
@@ -13,6 +14,7 @@ help() {
       echo "-J, --parallel ( with optional parameter > 0 ) - count of threads"
       echo "-C, --clean - clean build folder before build"
       echo "-U, --update - update cmake cache"
+      echo "-I, --installer - create installer"
 }
 
 exitWithMessage() {
@@ -31,10 +33,26 @@ validateBuildTypeErrorMessage() {
     fi
 }
 
-ShowMessageAndCall() {
+showMessageAndCall() {
     echo $1
     echo $2
     $2
+}
+
+copyCmakePresset() {
+    filePath="$PWD/configs"
+
+    if [[ "$OSTYPE" =~ ^linux ]]; then
+        filePath="${filePath}/linux"
+    fi
+
+    if [[ "$OSTYPE" =~ ^msys ]]; then
+        filePath="${filePath}/windows"
+    fi
+
+    filePath="${filePath}/CMakePresets.json"
+
+    cp "${filePath}" "$PWD"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -67,6 +85,9 @@ while [[ $# -gt 0 ]]; do
     -U|--update)
         updateCache=true;
         ;;
+    -I|--installer)
+        createInstaller=true;
+        ;;
     esac
     shift
 done
@@ -76,15 +97,24 @@ done
 CmakeBaseString="cmake"
 PresetString="--preset $BuildType"
 CacheString="$CmakeBaseString $PresetString"
-BuildString="$CmakeBaseString --build $PresetString"
 BuildFolder="$PWD/build/$BuildType"
+BuildString="$CmakeBaseString --build $PresetString"
 
-[[ $clean = true ]] && BuildString+=" --clean-first"
+[[ $clean = true || $createInstaller = true ]] && BuildString+=" --clean-first"
 
 [[ $ThreadCounts ]] && BuildString+=" -j $ThreadCounts"
 
-[[ $updateCache = true || ! -d $BuildFolder ]] && ShowMessageAndCall "Make CMake cache:" "$CacheString"
+if [[ $createInstaller = true ]]; then
+    rm -rf "$PWD/build/bin/$BuildType"
+    export CREATE_INSTALLER="ON"
+fi;
 
-ShowMessageAndCall "Build project:" "$BuildString"
+copyCmakePresset
+
+[[ $updateCache = true || ! -d $BuildFolder ]] && showMessageAndCall "Make CMake cache:" "$CacheString"
+
+showMessageAndCall "Build project:" "$BuildString"
+
+rm "${PWD}/CMakePresets.json"
 
 exit 0

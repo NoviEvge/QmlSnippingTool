@@ -1,0 +1,14 @@
+{
+    "clear": true,
+    "qif": true,
+    "deb": true,
+    "noCheckRPATH": true,
+    "noCheckPATH": true,
+    "noTranslations": true,
+    "bin": "${BINARY_PATH}",
+    "qmlDir": "${CMAKE_SOURCE_DIR}/source/qml",
+    "qmake": "${CMAKE_PREFIX_PATH}/bin/qmake",
+    "targetDir": "${BINARY_PATH}",
+    "icon": "${CMAKE_SOURCE_DIR}/icons/icon.png",
+    "installDirQIFW": "/opt"
+}
