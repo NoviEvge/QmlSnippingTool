@@ -11,15 +11,14 @@ Window {
     }
 
     ExtendedImage {
-        id: image;
-
         source: "image://ImageProvider/screenshot";
-       // scale: support.isWindowsOS() ? support.scaleFactor() : scale;
 
         sendMouseEventSignalCaller: SnippingAreaManager;
         onPressCreationColorFunc: function() { return Preferences.getSelectionAreaColor(); }
         onPressCreationWidthFunc: function() { return Preferences.getSelectionAreaWidth(); }
         onPressCreationType: captureBox.currentIndex + 1;
+
+        mouseAreaCursor: Qt.CrossCursor;
 
         onFinishedCallback: function( status ) {
             if ( ImageProviderEnum.ForcedExit === status ) {

@@ -1,48 +1,43 @@
 {
     "version": 2,
-    "cmakeMinimumRequired":
-    {
+    "cmakeMinimumRequired": {
         "major": 3,
         "minor": 21,
         "patch": 0
     },
-    "configurePresets":
-    [
+    "configurePresets": [
         {
             "name": "default",
             "displayName": "QmlSnippingTool",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
-            "cacheVariables":
-            {
+            "cacheVariables": {
                 "CMAKE_PREFIX_PATH": "/opt/Qt/6.2.2/gcc_64"
             }
         },
         {
             "inherits": "default",
             "name": "Debug",
-            "cacheVariables":
-            {
+            "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
             "inherits": "default",
             "name": "Release",
-            "cacheVariables":
-            {
+            "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
         }
     ],
     "buildPresets": [
-      {
-        "name": "Debug",
-        "configurePreset": "Debug"
-      },
-      {
-        "name": "Release",
-        "configurePreset": "Release"
-      }
+        {
+            "name": "Debug",
+            "configurePreset": "Debug"
+        },
+        {
+            "name": "Release",
+            "configurePreset": "Release"
+        }
     ]
 }

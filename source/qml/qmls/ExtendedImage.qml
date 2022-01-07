@@ -1,7 +1,7 @@
 import QtQuick
 
 Image {
-    id: extendetImage;
+    id: control;
     anchors.fill: parent;
     cache: false;
 
@@ -18,11 +18,13 @@ Image {
     property var onPressCreationWidthFunc:   undefined;
     property int onPressCreationType: 0;    // 0 == None
     property bool actionsAllowed: true;
+    property real mouseAreaCursor: Qt.ArrowCursor;
 
     MouseArea {
         anchors.fill: parent;
         acceptedButtons: Qt.LeftButton;
         preventStealing: true;
+        cursorShape: mouseAreaCursor;
 
         onPositionChanged: {
             if( validate( "onPositionChanged" ) )
@@ -45,7 +47,7 @@ Image {
 
     Connections {
         target: ImageProvider
-        enabled: extendetImage.enabled;
+        enabled: control.enabled;
 
         function onFrameUpdated() {
             source = "";

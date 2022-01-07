@@ -12,7 +12,7 @@ RowLayout {
 
     signal widthChanged( int width );
 
-    property int from: 0;
+    property int from: 1;
     property int to: 100;
 
     Slider {

@@ -34,7 +34,7 @@ RowLayout {
     CustomWidthButton {
         onClicked: support.createWindow( "qrc:/qmls/PreferencesWindow.qml" ).show();
         icon.source: "qrc:/images/settings.svg";
-        ToolTip.text: "Settings ( Ctrl+P )";
+        ToolTip.text: "Settings( Ctrl+P )";
         ToolTip.delay: Constants.tooltipDelay;
     }
 
